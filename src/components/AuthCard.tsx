@@ -74,7 +74,7 @@ const AuthCard = () => {
         First time here? You'll be prompted to set up you
       </div>
       <div className="w-[126.59px] mx-auto text-center text-[#666666] text-sm">
-        profile after sign up.
+        pe after sign up.
       </div>
     </div>
   );
