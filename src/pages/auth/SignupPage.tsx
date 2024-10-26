@@ -1,170 +1,43 @@
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { MdAccountCircle, MdPassword, MdOutlineMail, MdDriveFileRenameOutline } from "react-icons/md";
-import BaseButton from "../../components//ui/BaseButton";
-import BaseInput from "../../components/ui/BaseInput";
+import { Link } from "react-router-dom";
+import React from "react";
+import SignUpForm from "../../components/auth/SignupForm"; // Assuming SignUpForm is defined similar to the LoginForm
 
-const SignUpForm: React.FC = () => {
-  interface FormData {
-    username: string;
-    firstName: string;
-    lastName: string;
-    password: string;
-    email: string;
-  }
-
-  const [formData, setFormData] = useState<FormData>({
-    username: "",
-    firstName: "",
-    lastName: "",
-    password: "",
-    email: "",
-  });
-
-  const queryClient = useQueryClient();
-
-  const {
-    mutate: signupMutation,
-    isPending,
-    isError,
-    error,
-  } = useMutation({
-    mutationFn: async (credentials: FormData) => {
-      const { username, firstName, lastName, password, email } = credentials;
-
-      if (password.length < 6) {
-        throw new Error("Password must be at least 6 characters long");
-      }
-
-      try {
-        const res = await fetch("/api/auth/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, firstName, lastName, password, email }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || "Something went wrong");
-        }
-
-        return data;
-      } catch (error: any) {
-        console.error(error);
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    signupMutation(formData);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
+const SignUpPage: React.FC = () => {
   return (
-    <div>
-      <div className="w-full text-left text-[#4A9B74] whitespace-nowrap overflow-hidden text-ellipsis mb-6">
-        Sign up for an account
+    <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
+      {/* Logo */}
+      <header className="absolute top-0 left-0 p-4">
+        <img src="/src/assets/StuCo.svg" alt="StuCo Logo" className="h-12" />
+      </header>
+
+      {/* Sign Up Form */}
+      <div className="relative bg-white rounded-[10px] shadow-lg shadow-[#4A9B74] flex flex-col justify-start items-center p-16 space-y-9 text-center">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 className="w-full text-center text-[#4A9B74] text-3xl font-extrabold whitespace-nowrap overflow-hidden text-ellipsis">
+            Join StuCo Today!
+          </h2>
+        </div>
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md shadow-md">
+          <SignUpForm />
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">Already have an account?</span>
+              </div>
+            </div>
+            <div className="mt-6">
+              <Link to="/login">
+                <button className="text-[#4A9B74] hover:underline">Sign In</button>
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md">
-        {/* Username Field */}
-        <div className="flex flex-col items-start space-y-2 py-2">
-          <label className="input input-bordered rounded flex items-center gap-2 w-full">
-            <BaseInput
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
-              onChange={handleInputChange}
-              required
-            />
-            <MdAccountCircle className="text-3xl" />
-          </label>
-        </div>
-
-        {/* First Name Field */}
-        <div className="flex flex-col items-start space-y-2 py-2">
-          <label className="input input-bordered rounded flex items-center gap-2 w-full">
-            <BaseInput
-              type="text"
-              name="firstName"
-              placeholder="First Name"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              required
-            />
-            <MdDriveFileRenameOutline className="text-3xl" />
-          </label>
-        </div>
-
-        {/* Last Name Field */}
-        <div className="flex flex-col items-start space-y-2 py-2">
-          <label className="input input-bordered rounded flex items-center gap-2 w-full">
-            <BaseInput
-              type="text"
-              name="lastName"
-              placeholder="Last Name"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              required
-            />
-            <MdDriveFileRenameOutline className="text-3xl" />
-          </label>
-        </div>
-
-        {/* Email Field */}
-        <div className="flex flex-col items-start space-y-2 py-2">
-          <label className="input input-bordered rounded flex items-center gap-2 w-full">
-            <BaseInput
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-            <MdOutlineMail className="text-3xl" />
-          </label>
-        </div>
-
-        {/* Password Field */}
-        <div className="flex flex-col items-start space-y-2 py-2">
-          <label className="input input-bordered rounded flex items-center gap-2 w-full">
-            <BaseInput
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-            />
-            <MdPassword className="text-3xl" />
-          </label>
-        </div>
-
-        {/* Submit Button */}
-        <div className="flex flex-col items-start space-y-2 py-2">
-          <BaseButton type="submit">
-            {isPending ? "Loading..." : "Sign Up"}
-          </BaseButton>
-          {isError && <p className="text-red-500">{error.message}</p>}
-        </div>
-      </form>
     </div>
   );
 };
 
-export default SignUpForm;
+export default SignUpPage;

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import LoginForm from "../../components/auth/LoginForm";
-import LoginFormStub from "../../components/auth/LoginFormStub";
 
 const LoginPage : React.FC = () => {
     return (
@@ -29,7 +28,9 @@ const LoginPage : React.FC = () => {
                   </div>
                 </div>
                 <div className="mt-6">
-                    Create Account
+                  <Link to="/signup">
+                    <button className="text-[#4A9B74] hover:underline">Create an Account</button>
+                  </Link>
                 </div>
               </div>
           </div>
