@@ -20,7 +20,7 @@ Welcome to the **StuCo Frontend** repository! This project is part of StuCo, a s
 1. **Clone the repository**:
 
    ```sh
-   git clone https://github.com/yourusername/stuco-frontend.git
+   git clone https://github.com/StuCo-Official/Frontend.git
    ```
 
 2. **Navigate to the project directory**:
