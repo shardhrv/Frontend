@@ -1,10 +1,10 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import LoginPage from './pages/auth/LoginPage';
-import HomePage from './pages/home/HomePage';
 import SignUpPage from './pages/auth/SignupPage';
 
 import { Toaster } from 'react-hot-toast';
+import ProfilePage from './pages/auth/EditProfilePage';
 
 const App = () => {
   return (
@@ -13,6 +13,7 @@ const App = () => {
         <Route path="/" element={<Navigate to="/login" />} />
 				<Route path='/login' element={<LoginPage />} />
 				<Route path='/signup' element={<SignUpPage/>} />
+        <Route path="/edit-profile" element={<ProfilePage />} />
 			</Routes>
       <Toaster/>
     </div>
