@@ -1,6 +1,11 @@
+import DatePicker from 'react-datepicker';
 import BackgroundLayout from '../components/BackgroundLayout';
+import React, { useState } from "react";
+
+
 
 function ProfilePage() {
+
     return (
         <BackgroundLayout>
             <div className="absolute w-[922px] h-[610px] top-[80px] bg-[#ffffff] rounded-[32px] shadow-[0px_4px_4px_#00000040] justify-center items-center">
@@ -26,14 +31,18 @@ function ProfilePage() {
                             <label className="text-[#8f8e8e] text-xs absolute top-2 left-3">
                                 Country
                             </label>
-                            <input
-                                type='string'
+                            <select
                                 // type="email"
-                                // value={}
                                 // onChange={(e) => setEmail(e.target.value)}
-                                className="w-[420px] h-[60px] pt-5 pl-3 pr-10 bg-white rounded-lg border border-[#a9a9a9] text-black text-sm font-semibold"
-                                placeholder="Conutry"
-                            />
+                                className="w-[420px] h-[60px] pt-5 pl-2 bg-white rounded-lg border border-[#a9a9a9] text-[#000000] text-sm font-semibold appearance-none"
+                            >
+                                <option value="" disabled selected>
+                                    Country
+                                </option>
+                                <option value="us">United States</option>
+                                <option value="uk">United Kingdom</option>
+                                <option value="sg">Singapore</option>
+                            </select>
                             {/* Icon */}
                         </div>
                         <div className='flex space-x-[24px]'>
@@ -44,14 +53,19 @@ function ProfilePage() {
                                 <select
                                     // type="email"
                                     // onChange={(e) => setEmail(e.target.value)}
-                                    className="w-[198px] h-[60px] pt-5 pl-2 pr-5 bg-white rounded-lg border border-[#a9a9a9] text-[#000000] text-sm font-semibold"
+                                    className="w-[198px] h-[60px] pt-5 pl-2 bg-white rounded-lg border border-[#a9a9a9] text-[#000000] text-sm font-semibold appearance-none"
                                 >
                                     <option value="" disabled selected>
                                         Education Level
                                     </option>
-                                    <option value="uni">Undergraduate</option>
-                                    <option value="highschool">High School</option>
-                                    <option value="middleschool">Middle School</option>
+                                    <option value="sec">Secondary</option>
+                                    <option value="alv">A-Level</option>
+                                    <option value="igcse">IGCSE</option>
+                                    <option value="ib">IB</option>
+                                    <option value="olv">O-Level</option>
+                                    <option value="bach">Bachelor's Degree</option>
+                                    <option value="master">Master's Degree</option>
+                                    <option value="prof">Professional</option>
                                 </select>
                             </div>
 
