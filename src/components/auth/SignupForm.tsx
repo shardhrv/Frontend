@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MdAccountCircle, MdPassword, MdOutlineMail, MdDriveFileRenameOutline } from "react-icons/md";
 import BaseButton from "../ui/BaseButton";
 import BaseInput from "../ui/BaseInput";
+import { useNavigate } from "react-router-dom";
 
 const SignUpForm: React.FC = () => {
   interface FormData {
@@ -22,6 +23,7 @@ const SignUpForm: React.FC = () => {
   });
 
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const {
     mutate: signupMutation,
@@ -52,13 +54,14 @@ const SignUpForm: React.FC = () => {
         }
 
         return data;
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error(error);
         throw error;
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      navigate("/edit-profile"); // Navigate to EditProfilePage on success
     },
   });
 
