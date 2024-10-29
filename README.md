@@ -26,7 +26,7 @@ Welcome to the **StuCo Frontend** repository! This project is part of StuCo, a s
 2. **Navigate to the project directory**:
 
    ```sh
-   cd stuco-frontend
+   cd Frontend
    ```
 
 3. **Install dependencies**:
