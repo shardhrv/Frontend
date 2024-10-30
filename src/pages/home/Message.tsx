@@ -1,4 +1,4 @@
-import MyAppBar from "../components/AppBar";
+import MyAppBar from "../../components/layout/AppBar.tsx";
 
 function MessageHome() {
     return (
