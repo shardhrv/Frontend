@@ -1,6 +1,6 @@
 // src/components/BackgroundLayout.tsx
 import React from 'react';
-import StuCoSmallLogo from '../assets/StuCoSmallLogo.png';
+import StuCoSmallLogo from '../../assets/StuCoSmallLogo.png';
 
 interface BackgroundLayoutProps {
     children: React.ReactNode;
