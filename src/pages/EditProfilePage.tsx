@@ -1,11 +1,8 @@
-import DatePicker from 'react-datepicker';
 import BackgroundLayout from '../components/BackgroundLayout';
 import React, { useState } from "react";
 
 
-
 function ProfilePage() {
-
     return (
         <BackgroundLayout>
             <div className="absolute w-[922px] h-[610px] top-[80px] bg-[#ffffff] rounded-[32px] shadow-[0px_4px_4px_#00000040] justify-center items-center">
@@ -178,8 +175,6 @@ function ProfilePage() {
                         Continue
                     </button>
                 </div>
-
-
             </div>
         </BackgroundLayout>
     )
