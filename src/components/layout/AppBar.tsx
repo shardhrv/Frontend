@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from '../assets/StuCoAppBarLogo.png'; // Adjust the path based on your folder structure
-import DemoProfileImage from '../assets/DemoProfileImage.png'
+import logo from '../../assets/StuCoAppBarLogo.png'; // Adjust the path based on your folder structure
+import DemoProfileImage from '../../assets/DemoProfileImage.png'
 import { FaRegCompass } from "react-icons/fa6";
 import { VscTools } from "react-icons/vsc";
 import { IoLibraryOutline } from "react-icons/io5";
