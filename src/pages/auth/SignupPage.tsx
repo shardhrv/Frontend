@@ -12,7 +12,7 @@ const SignupPage: React.FC = () => {
           <div className="flex items-center">
             <img
               src={logoImage} // Using the imported logo image
-              alt="StuCo Logo"
+              alt="StuCoLogo"
               className="w-14 h-14 object-cover"
             />
             <div className="ml-2 text-[#4A9B74] font-bold italic text-2xl">

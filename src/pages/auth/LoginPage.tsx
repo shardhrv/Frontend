@@ -196,7 +196,7 @@ const LoginPage: React.FC = () => {
               <span className="text-black text-sm font-semibold">
                 New to StuCo?{" "}
               </span>
-              <Link to="/signup" className="text-[#4a9b74] text-sm font-blod">
+              <Link to="/signup" className="text-[#4a9b74] text-sm font-bold">
                 Join Now
               </Link>
             </div>
