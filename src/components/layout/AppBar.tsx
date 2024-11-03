@@ -10,7 +10,7 @@ import { BiSearchAlt } from "react-icons/bi";
 import { useState } from 'react';
 
 const MyAppBar: React.FC = () => {
-    const [isLoggedIn] = useState(false);
+    const [isLoggedIn] = useState(true);
 
     return (
         <header className="bg-[#e4f3ec] text-white shadow-md w-full h-[56px]">
