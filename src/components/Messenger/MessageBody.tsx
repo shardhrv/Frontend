@@ -2,8 +2,8 @@
 
 const MessageBody = () => {
     return (
-        <div className="flex-1 overflow-y-auto">
-            No messages
+        <div className="overflow-y-auto h-full flex items-center justify-center">
+            No messages. Start a new chat!
         </div>
     )
 }

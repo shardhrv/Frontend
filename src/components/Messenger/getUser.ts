@@ -1,6 +1,5 @@
 import DemoProfileImage from '../../assets/DemoProfileImage.png';
 
-
 const getUser = () => {
     const dummyUsers = [
         { title: 'Alice', numUnread: 9, icon: DemoProfileImage, numUsers: 2 },

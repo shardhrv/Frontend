@@ -2,17 +2,23 @@ import MyAppBar from "../../components/layout/AppBar";
 import ChatIcon from '../../assets/ChatIcon.png';
 import { BiSearchAlt } from "react-icons/bi";
 import MessageList from "../../components/Messenger/MessageList";
-import { IoMdAddCircleOutline } from "react-icons/io";
 import SideBar from "../../components/layout/SideBar";
 import getUser from "../../components/Messenger/getUser";
 import GroupChatButton from "../../components/Messenger/GroupChatButton";
 import MessageBody from "../../components/Messenger/MessageBody";
-// import { useEffect, useState } from "react";
+import MessageForm from "../../components/Messenger/MessageForm";
+import { useEffect, useState } from "react";
 
 
 function MessageHome() {
 
     const users = getUser();
+    const [messages, setMessages] = useState<string[]>([]);
+
+    // Function to handle sending a new message
+    const handleSendMessage = (newMessage: string) => {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+    };
 
     return (
         <div className="w-screen h-screen overflow-hidden bg-white">
@@ -55,8 +61,13 @@ function MessageHome() {
                         <GroupChatButton />
                     </div>
                 </div>
-                <div>
-                    <MessageBody/>
+                <div className="relative w-full mb-[50px] justify-center items-center">
+                    <div className="h-full">
+                        <MessageBody />
+                    </div>
+                    <div className="w-full absolute items-center justify-center bottom-5 flex px-[38px]">
+                        <MessageForm onSend={handleSendMessage} />
+                    </div>
                 </div>
             </main >
         </div >

@@ -1,4 +1,3 @@
-import React from 'react';
 import { CiUser } from 'react-icons/ci';
 import { PiUsersThree } from "react-icons/pi";
 
@@ -6,7 +5,7 @@ import { PiUsersThree } from "react-icons/pi";
 interface MessageListProps {
     title: string;
     numUnread: number;
-    icon?: React.ReactNode;
+    icon?: string;
     numUsers: number;
 }
 
@@ -16,7 +15,7 @@ const MessageList: React.FC<MessageListProps> = ({ title, numUnread, icon, numUs
             {numUsers > 2
                 ? (<div className="w-9 min-w-9 h-9 mr-2 rounded-full bg-white items-center justify-center flex text-black"><PiUsersThree className='scale-110' /></div>)
                 : (icon
-                    ? (<div className="w-[36px] h-[36px] mr-2 rounded-full bg-white items-center justify-center flex text-black overflow-hidden">{icon}</div>)
+                    ? (<div className="w-[36px] h-[36px] mr-2 rounded-full bg-white items-center justify-center flex text-black overflow-hidden"><img src={icon}/></div>)
                     : (<div className="w-[36px] h-[36px] mr-2 rounded-full items-center justify-center text-base font-normal flex bg-[#7eb698] text-white" ><CiUser /></div>)
                 )}
             <h2 className="truncate overflow-hidden whitespace-nowrap flex-grow">{title}</h2>
