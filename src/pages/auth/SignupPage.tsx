@@ -7,14 +7,15 @@ const SignupPage: React.FC = () => {
     <div className="bg-[#e3f2eb] flex justify-center w-full min-h-screen">
       <div className="bg-white border border-solid border-black w-full max-w-[1440px] h-full relative">
         {/* Header with logo */}
-        <header className="flex items-center absolute top-11 left-[150px]">
-          <div className="relative w-[161px] h-11 flex items-center">
+
+        <header className="flex items-center absolute top-0 left-0 p-5">
+          <div className="flex items-center">
             <img
               src={logoImage} // Using the imported logo image
-              alt="StuCo Logo"
-              className="w-11 h-11 object-cover"
+              alt="StuCoLogo"
+              className="w-14 h-14 object-cover"
             />
-            <div className="ml-2 text-[#4A9B74] font-bold italic text-xl">
+            <div className="ml-2 text-[#4A9B74] font-bold italic text-2xl">
               StuCo
             </div>
           </div>
@@ -41,7 +42,7 @@ const SignupPage: React.FC = () => {
               <div className="mt-4 text-center">
                 <Link
                   to="/login"
-                  className="text-gray-500 underline text-sm leading-5"
+                  className="text-[#4a9b74] underline text-sm leading-5 font-bold"
                 >
                   Log in instead
                 </Link>
