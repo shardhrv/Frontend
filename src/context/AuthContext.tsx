@@ -1,13 +1,13 @@
 import { createContext, useEffect, useState } from "react";
 import { UserProfile } from "../models/UserProfile";
 import { useNavigate } from "react-router-dom";
-import { loginAPI, signupAPI } from "../services/AuthService";
+import { getUserProfileAPI, loginAPI, signupAPI, logoutAPI } from "../services/AuthService";
 import toast from "react-hot-toast";
+import { handleError } from "../helper/ErrorHandler";
 
 type UserContextType = {
     // States
     user: UserProfile | null;
-    token: string | null;
     // Methods
     registerUser: (firstName: string, lastName: string, username: string, email: string, password: string) => void;
     loginUser: (username: string, password: string) => void;
@@ -21,19 +21,24 @@ const UserContext = createContext<UserContextType>({} as UserContextType);
 
 export const UserProvider = ({ children }: Props) => {
     const navigate = useNavigate();
-    const [token, setToken] = useState<string | null>(null);
     const [user, setUser]  = useState<UserProfile | null>(null);
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
-        const user = localStorage.getItem("user");
-        const token = localStorage.getItem("token");
-        if (user && token) {
-            setUser(JSON.parse(user));
-            setToken(token); 
-        }
-        setIsReady(true);
-    }, []);
+        const fetchUser = async () => {
+          try {
+            const res = await getUserProfileAPI();
+            if (res) {
+              setUser(res);
+            }
+          } catch (error) {
+            handleError(error);
+          } finally {
+            setIsReady(true);
+          }
+        };
+        fetchUser();
+      }, []);
 
     const registerUser = async (
         firstName: string,
@@ -42,64 +47,48 @@ export const UserProvider = ({ children }: Props) => {
         email: string,
         password: string
     ) => {
-        await signupAPI(firstName, lastName, username, email, password)
-          .then((res) => {
+        try {
+            const res = await signupAPI(username, firstName, lastName, password, email);
             if (res) {
-              localStorage.setItem("token", res?.data.token);
-              const userObj = {
-                firstName: res?.data.firstName,
-                lastName: res?.data.lastName,
-                username: res?.data.username,
-                email: res?.data.email,
-              };
-              localStorage.setItem("user", JSON.stringify(userObj));
-              setToken(res?.data.token!);
-              setUser(userObj!);
-              toast.success("Login Success!");
-              navigate("/search");
+                setUser(res);
+                toast.success("Signup Success!");
+                navigate("/");
             }
-          })
-          .catch((e) => toast.error("Server error occured"));
+        } catch (error) {
+            toast.error("Server error occurred during signup");
+        }
     };
 
     const loginUser = async (username: string, password: string) => {
-        await loginAPI(username, password)
-          .then((res) => {
-            if (res) {
-              localStorage.setItem("token", res?.data.token);
-              const userObj = {
-                firstName: res?.data.firstName,
-                lastName: res?.data.lastName,
-                username: res?.data.username,
-                email: res?.data.email,
-              };
-              localStorage.setItem("user", JSON.stringify(userObj));
-              setToken(res?.data.token!);
-              setUser(userObj!);
-              toast.success("Login Success!");
-              navigate("/search");
-            }
-          })
-          .catch((e) => toast.error("Server error occured"));
-      };
-    
-      const isLoggedIn = () => {
-        return !!user;
-    };
+    try {
+      const res = await loginAPI(username, password);
+      if (res) {
+        setUser(res);
+        toast.success("Login Success!");
+        navigate("/search");
+      }
+    } catch (error) {
+      toast.error("Invalid email or password");
+    }
+  };
 
-    const logout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        setUser(null);
-        setToken("");
-        navigate("/");
-    };
+  const logout = async () => {
+    try {
+      await logoutAPI();
+      setUser(null);
+      navigate("/");
+    } catch (error) {
+      toast.error("Logout failed");
+    }
+  };
+
+  const isLoggedIn = () => {
+    return !!user;
+  };
     
-    return (
-        <UserContext.Provider
-            value={{ loginUser, user, token, logout, isLoggedIn, registerUser }}
-        >
-            {isReady ? children : null}
-        </UserContext.Provider>
-    );
+  return (
+    <UserContext.Provider value={{ loginUser, user, logout, isLoggedIn, registerUser }}>
+      {isReady ? children : null}
+    </UserContext.Provider>
+  );
 };
