@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { UserProfile } from "../models/UserProfile";
 import { useNavigate } from "react-router-dom";
 import { getUserProfileAPI, loginAPI, signupAPI, logoutAPI } from "../services/AuthService";
@@ -18,6 +18,14 @@ type UserContextType = {
 type Props = { children: React.ReactNode };
 
 const UserContext = createContext<UserContextType>({} as UserContextType);
+
+export const useAuthContext = (): UserContextType => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useAuthContext must be used within a UserProvider");
+  }
+  return context;
+};
 
 export const UserProvider = ({ children }: Props) => {
     const navigate = useNavigate();
