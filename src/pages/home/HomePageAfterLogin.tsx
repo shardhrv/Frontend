@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import MyAppBar from '../../components/layout/AppBar.tsx';
-import SearchFilterBar from '../../components/layout/Searchbar.tsx';
 import PostCard from '../../components/posts/PostCard.tsx';
 import CreatePostCard from '../../components/cards/CreatePostCard.tsx';
+
 
 // Define types for user and posts
 export type User = {
@@ -112,13 +112,16 @@ const MainPageAfterLogin: React.FC = () => {
   return (
     <div className="main-page">
       {/* Top AppBar */}
-      <section className="w-full fixed top-0 left-0 right-0">
+      <section className="z-50 w-full fixed top-0 left-0 right-0">
         <MyAppBar />
       </section>
 
       {/* Create Post Card */}
-      <section className="create-post-card flex mt-16">
-        <CreatePostCard user={currentUser} token={token} />
+      <section className="mt-[64px] flex flex-col items-center">
+        <div className="w-[624px]">
+          <CreatePostCard user={currentUser} token={token} />
+        </div>
+        
       </section>
 
       {/* Search and Filter Bar */}
@@ -130,7 +133,9 @@ const MainPageAfterLogin: React.FC = () => {
       <section className="posts-section mt-6">
         {posts.length > 0 ? (
           posts.map((post) => (
-            <PostCard key={post._id} post={post} currentUser={currentUser} token={token} />
+            <div key={post._id} className="w-[624px]">
+              <PostCard post={post} currentUser={currentUser} token={token} />
+            </div>
           ))
         ) : (
           <p className="text-center text-gray-600">No posts available.</p>

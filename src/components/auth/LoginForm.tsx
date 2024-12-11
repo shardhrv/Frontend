@@ -65,9 +65,11 @@ const LoginForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+    console.log("Submitting form with data:", formData); // Debug log
     loginMutation(formData);
   };
+
+  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ 
@@ -119,4 +121,4 @@ const LoginForm: React.FC = () => {
   );
 };
   
-  export default LoginForm;
+export default LoginForm;

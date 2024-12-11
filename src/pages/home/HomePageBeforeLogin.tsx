@@ -1,6 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import image31 from "../../assets/Image_31.png";
 import IntroduceFeatureCard from '../../components/cards/IntroduceFeature.tsx';
 import ContactUsCard from '../../components/cards/ContactUsCard.tsx';
 import Footer from '../../components/cards/Footer.tsx';

@@ -5,7 +5,7 @@ import moment from 'moment';
 type User = {
   _id: string;
   username: string;
-  profilePicture?: string;
+  profileImage?: string;
   educationLevel?: string; 
   academicYear?: string; 
 };
@@ -42,6 +42,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, token }) => {
   const [likeLoading, setLikeLoading] = useState<boolean>(false);
   const [commentLoading, setCommentLoading] = useState<boolean>(false);
   const [showPopOut, setShowPopOut] = useState<boolean>(false);
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
+
+  const showDeleteButton = currentUser._id === post.user._id;
+
   const handleLike = async () => {
     setLikeLoading(true);
     try {
@@ -90,26 +95,80 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, token }) => {
     setTimeout(() => setShowPopOut(false), 3000); // Hide the message after 3 seconds
   };
 
+  const handleDelete = async () => {
+    try {
+      await axios.delete(
+        `http://localhost:3000/api/posts/${post._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setIsDeleted(true); // Hide the post after deletion
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
+
+  if (isDeleted) {
+    return null; // Do not render if deleted
+  }
+
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 mb-6 border border-gray-200">
+    <div className="bg-white shadow-md rounded-lg p-6 mb-6 border border-gray-200 relative">
       {/* Header */}
       <div className="flex items-center">
+        
         <img
-          src={post.user.profilePicture || '/default-profile.png'}
+          src={post.user.profileImage ? post.user.profileImage : 'src/assets/DemoProfileImage.png'}
           alt={post.user.username}
           className="w-12 h-12 rounded-full object-cover"
         />
+
         <div className="ml-4">
           <p className="font-semibold text-gray-800">
             {post.user.username}
             <span className="text-gray-500 text-sm ml-2">
               {post.user.educationLevel && `${post.user.educationLevel}, `}
-              {post.user.academicYear ?  `Year ${post.user.academicYear}`: ''}
+              {post.user.academicYear ? `Year ${post.user.academicYear}` : ''}
             </span>
           </p>
           <p className="text-gray-500 text-sm">{moment(post.createdAt).fromNow()}</p>
         </div>
       </div>
+
+      {showDeleteButton && (
+        <>
+          <button
+            onClick={() => setShowDeleteConfirm(true)}
+            className="absolute top-4 right-4 text-red-500 hover:text-red-700"
+            title="Delete Post"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          {showDeleteConfirm && (
+            <div className="absolute top-14 right-4 bg-white border border-gray-300 p-4 rounded-md shadow-lg z-10">
+              <p className="text-gray-800 mb-4">Are you sure you want to delete this post?</p>
+              <div className="flex space-x-4">
+                <button
+                  onClick={handleDelete}
+                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                >
+                  Yes, Delete
+                </button>
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+        </>
+      )}
 
       {/* Post Content */}
       <div className="mt-4">
@@ -159,7 +218,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, token }) => {
           className="flex items-center space-x-1 hover:text-[#7EB698] text-gray-500"
         >
           <img
-            src="/src/assets/export.png"
+            src="src/assets/export.png"
             alt="Export"
             className="w-5 h-5"
           />
@@ -172,10 +231,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, token }) => {
         <div className="mt-6">
           <form onSubmit={handleCommentSubmit} className="flex items-center space-x-2">
             <img
-              src={currentUser.profilePicture || 'src/assets/DemoProfileImage.png'}
+              src={currentUser.profileImage || 'src/assets/DemoProfileImage.png'}
               alt={currentUser.username}
               className="w-8 h-8 rounded-full object-cover"
             />
+
             <input
               type="text"
               placeholder="Add a comment..."
@@ -195,7 +255,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, token }) => {
             {comments.map((comment) => (
               <div key={comment._id} className="flex items-start space-x-2">
                 <img
-                  src={comment.user.profilePicture || '/default-profile.png'}
+                  src={comment.user.profileImage ? comment.user.profileImage : 'src/assets/DemoProfileImage.png'}
                   alt={comment.user.username}
                   className="w-8 h-8 rounded-full object-cover"
                 />
@@ -217,7 +277,6 @@ const PostCard: React.FC<PostCardProps> = ({ post, currentUser, token }) => {
           URL is copied to your clipboard!
         </div>
       )}
-
     </div>
   );
 };

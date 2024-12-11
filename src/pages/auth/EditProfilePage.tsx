@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import BackgroundLayout from '../../components/layout/BackgroundLayout';
 
-const ProfilePage: React.FC = () => {
+const ProfileSetUpPage: React.FC = () => {
     const navigate = useNavigate();
   
     // State for form fields
@@ -197,4 +197,4 @@ const ProfilePage: React.FC = () => {
     );
   };
   
-  export default ProfilePage;
+  export default ProfileSetUpPage;

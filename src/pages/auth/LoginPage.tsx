@@ -48,8 +48,7 @@ const LoginPage: React.FC = () => {
         if (data.user && data.token) {
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("token", data.token);
-
-          console.log(data);
+          
           return data;
         } else {
           console.warn("User or token not found in the response");

@@ -4,9 +4,10 @@ import LoginPage from './pages/auth/LoginPage';
 import SignUpPage from './pages/auth/SignupPage';
 
 import { Toaster } from 'react-hot-toast';
-import ProfilePage from './pages/auth/EditProfilePage';
+import ProfilePage from './pages/home/ProfilePage';
 import MainPageAfterLogin from './pages/home/HomePageAfterLogin';
 import HomePage from './pages/home/HomePageBeforeLogin';
+import ProfileSetUpPage from './pages/auth/EditProfilePage';
 
 const App = () => {
   return (
@@ -15,8 +16,9 @@ const App = () => {
         <Route path= '/' element={<HomePage />}/>
 				<Route path='/login' element={<LoginPage />} />
 				<Route path='/signup' element={<SignUpPage/>} />
-        <Route path="/edit-profile" element={<ProfilePage />} />
+        <Route path="/edit-profile" element={<ProfileSetUpPage />} />
         <Route path="/home" element={<MainPageAfterLogin />} />
+        <Route path="/profile" element={<ProfilePage/>}/>
 			</Routes>
       <Toaster/>
     </div>

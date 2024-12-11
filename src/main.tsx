@@ -5,6 +5,10 @@ import App from './App.tsx';
 import './index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import PostCard from './components/posts/PostCard.tsx';
+import UploadPostCard from './components/cards/CreatePost.tsx';
+import ProfileInformation from './components/cards/ProfileInfoCard.tsx';
+import ProfilePage from './pages/home/ProfilePage.tsx';
+import ProfileSetUpPage from './pages/auth/EditProfilePage.tsx';
 
 const queryClient = new QueryClient();
 const mockPost = {
@@ -55,7 +59,11 @@ createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
     {/* <PostCard post={mockPost} currentUser={mockCurrentUser} token={mockToken} /> */}
+    {/* <UploadPostCard user={mockCurrentUser}/> */}
     <App/>
+    {/* <ProfilePage/> */}
+
     </QueryClientProvider>
   </BrowserRouter>
 );
+
