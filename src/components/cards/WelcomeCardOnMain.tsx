@@ -1,6 +1,15 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import image31 from "../../assets/Image_31.png";
 
 export const WelcomeCard: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleGetStartedClick = () => {
+    console.log('Get Started button clicked'); // Ensure this log appears
+    navigate('/login'); // Navigate to the MainPageAfterLogin
+  };
+
   return (
     <div className="relative w-full max-w-6xl mx-auto aspect-[1440/704] bg-white border-none flex flex-col md:flex-row items-center justify-center p-6">
       <div className="relative w-full md:w-1/2 h-auto md:pl-8 flex flex-col justify-center items-start">
@@ -13,7 +22,10 @@ export const WelcomeCard: React.FC = () => {
           resources to confidently guide your way to college acceptance.
         </p>
 
-        <button className="mt-8 py-3 px-6 bg-[#4a9b74] text-white text-lg rounded-md transition duration-300 ease-in-out transform hover:bg-[#3d8360] hover:scale-105">
+        <button
+          onClick={handleGetStartedClick}
+          className="mt-8 py-3 px-6 bg-[#4a9b74] text-white text-lg rounded-md transition duration-300 ease-in-out transform hover:bg-[#3d8360] hover:scale-105"
+        >
           Get Started
         </button>
       </div>

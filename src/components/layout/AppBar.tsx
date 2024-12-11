@@ -13,7 +13,7 @@ const MyAppBar: React.FC = () => {
     const [isLoggedIn] = useState(true);
 
     return (
-        <header className="bg-[#e4f3ec] text-white shadow-md w-full h-[56px]">
+        <div className="bg-[#e4f3ec] text-white shadow-md w-full h-[56px]">
             <div className="flex items-center justify-between h-full px-4">
                 {/* Left section: Logo and Navigation */}
                 <div className="flex items-center h-full">
@@ -73,7 +73,7 @@ const MyAppBar: React.FC = () => {
                     </div>
                 )}
             </div>
-        </header>
+        </div>
     );
 };
 

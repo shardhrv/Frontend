@@ -33,22 +33,49 @@ const ProfilePage: React.FC = () => {
     };
   
     // Handle form submission
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
-  
-      // Validate required fields and accepted terms
+    
+      // Validation for required fields
+      if (!profileData.dob || !profileData.country || !profileData.educationLevel || !profileData.academicYear || !profileData.contact) {
+        alert("All fields are required. Please fill out all the fields.");
+        return;
+      }
+    
       if (!acceptedPrivacy || !acceptedTerms) {
         alert("Please accept the privacy policy and terms of use to proceed.");
         return;
       }
-  
-      // Log or handle data submission
-      console.log("Profile Data Submitted:", profileData);
-      console.log("Receive Notifications:", notifications);
-  
-      // Navigate to the next page upon successful submission
-      navigate("/next-page"); // Update the path as needed
+    
+      // Proceed with the API call
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("User is not authenticated!");
+          return;
+        }
+    
+        const response = await fetch("http://localhost:3000/api/users/update", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(profileData),
+        });
+    
+        if (!response.ok) {
+          throw new Error("Failed to update profile");
+        }
+    
+        alert("Profile updated successfully");
+        navigate("/home");
+      } catch (error) {
+        console.error("Error updating profile:", error);
+        alert("Error updating profile");
+      }
     };
+    
   
     return (
       <BackgroundLayout>
