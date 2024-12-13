@@ -7,6 +7,7 @@ const SignupPage: React.FC = () => {
     <div className="bg-[#e3f2eb] flex justify-center w-full min-h-screen">
       <div className="bg-white border border-solid border-black w-full max-w-[1440px] h-full relative">
         {/* Header with logo */}
+
         <header className="flex items-center absolute top-0 left-0 p-5">
           <div className="flex items-center">
             <img
@@ -26,17 +27,17 @@ const SignupPage: React.FC = () => {
           <div className="mb-8 text-center">
             <h1 className="text-black font-bold text-[34px] leading-[48px]">
               Join StuCo Today!
+
             </h1>
             <p className="mt-2 text-gray-500 text-sm leading-5">
               Enter your details to proceed further
             </p>
           </div>
-
-          {/* Flex container: form and image */}
           <div className="flex">
             {/* Left side (form) */}
             <div className="w-3/5 pr-8">
               <SignUpForm />
+
 
               {/* "Already have an account?" divider and Sign In link */}
               <div className="mt-8">
@@ -58,13 +59,15 @@ const SignupPage: React.FC = () => {
                     Sign In
                   </Link>
                 </div>
+
               </div>
             </div>
 
             {/* Right side (image) */}
             <div className="w-2/5 flex items-center justify-center">
-              <img
+
                 src={logoImage}
+
                 alt="Illustration"
                 className="w-[253px] h-[263px] object-cover"
               />
