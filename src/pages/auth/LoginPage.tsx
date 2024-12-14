@@ -1,81 +1,23 @@
 // src/pages/LoginPage.tsx
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { MdVisibilityOff, MdVisibility } from "react-icons/md";
+import { useLogin } from "../../hooks/AuthHooks/useLogin";
 import usernameIcon from "../../assets/usernameIcon.png";
 import logoImage from "../../assets/StuCoLogo.png";
 
 const LoginPage: React.FC = () => {
-  // State for username and password inputs
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  // State for "Remember me" checkbox
   const [rememberMe, setRememberMe] = useState(false);
-
-  // State for password visibility toggle
   const [showPassword, setShowPassword] = useState(false);
 
-  // React Router navigation
-  const navigate = useNavigate();
+  const { loginUser, isPending } = useLogin();
 
-  // Backend mutation using React Query
-  const queryClient = useQueryClient();
-
-  const {
-    mutate: loginMutation,
-    isPending,
-    isError,
-    error,
-  } = useMutation({
-    mutationFn: async (credentials: { username: string; password: string }) => {
-      const { username, password } = credentials;
-
-      try {
-        const res = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password }),
-        });
-
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.error || "Something went wrong");
-        }
-
-        if (data.user && data.token) {
-          localStorage.setItem("user", JSON.stringify(data.user));
-          localStorage.setItem("token", data.token);
-          
-          return data;
-        } else {
-          console.warn("User or token not found in the response");
-        }
-
-        
-
-        return data;
-      } catch (error: unknown) {
-        console.error(error);
-        throw error;
-      }
-    },
-    onSuccess: (data) => {
-      if (data.user && data.token) {
-        queryClient.invalidateQueries({ queryKey: ["authUser"] });
-        console.log("Login successful");
-        navigate("/home");
-      }
-    },    
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    loginMutation({ username, password });
+    await loginUser(username, password);
   };
 
   const handleSocialLogin = (provider: string) => {
@@ -173,10 +115,6 @@ const LoginPage: React.FC = () => {
             >
               {isPending ? "Loading..." : "Continue"}
             </button>
-            {/* Error Message */}
-            {isError && (
-              <p className="text-red-500">{(error as Error).message}</p>
-            )}
           </form>
           {/* Or Divider */}
           <div className="flex items-center mt-4">
