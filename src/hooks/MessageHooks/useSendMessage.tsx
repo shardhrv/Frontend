@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Message } from "../models/Message"; // Import the Message interface
+import { Message } from "../../models/Message"; // Import the Message interface
 
 const useSendMessage = (conversationId: string | null) => {
   const [loading, setLoading] = useState<boolean>(false);

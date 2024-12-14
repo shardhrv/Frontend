@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useSocketContext } from "../context/SocketContext";
-import { Message } from "../models/Message"; // Import the existing Message interface
+import { useSocketContext } from "../../context/SocketContext";
+import { Message } from "../../models/Message"; // Import the existing Message interface
 
 const useListenMessages = () => {
   const { socket } = useSocketContext();

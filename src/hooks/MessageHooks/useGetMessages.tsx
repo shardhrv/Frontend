@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Message } from "../models/Message"; // Import your Message interface
+import { Message } from "../../models/Message"; // Import your Message interface
 
 interface SelectedConversation {
   _id: string; //id should belong to chat

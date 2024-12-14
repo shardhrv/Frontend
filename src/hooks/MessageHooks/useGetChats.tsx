@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Chat } from "../models/Chat";
+import { Chat } from "../../models/Chat";
 
 const useGetChats = () => {
   const [loading, setLoading] = useState<boolean>(false);
