@@ -23,7 +23,7 @@ export const loginAPI = async (username: string, password: string) => {
 
     return res.data;
   } catch (error) {
-    handleError(error);
+    throw error;
   }
 };
 
@@ -45,7 +45,7 @@ export const signupAPI = async (
 
     return res.data;
   } catch (error) {
-    handleError(error);
+    throw error;
   }
 };
 
@@ -53,6 +53,6 @@ export const logoutAPI = async (): Promise<void> => {
   try {
     await axios.post("/api/auth/logout");
   } catch (error) {
-    handleError(error);
+    throw error;
   }
 };

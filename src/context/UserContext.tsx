@@ -1,7 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { UserProfile } from "../models/UserProfile";
-import { getUserProfileAPI } from "../services/AuthService";
-import { handleError } from "../helper/ErrorHandler";
 
 type UserContextType = {
     user: UserProfile | null;
@@ -13,36 +11,18 @@ type Props = { children: React.ReactNode };
 const UserContext = createContext<UserContextType>({} as UserContextType);
 
 export const useUserContext = (): UserContextType => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUserContext must be used within a UserProvider");
-  }
-  return context;
+  return useContext(UserContext);
 };
 
 export const UserContextProvider = ({ children }: Props) => {
-    const [user, setUser]  = useState<UserProfile | null>(null);
-    const [isReady, setIsReady] = useState(false);
+  const [user, setUser]  = useState<UserProfile | null>(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
-    useEffect(() => {
-        const fetchUser = async () => {
-          try {
-            const res = await getUserProfileAPI();
-            if (res) {
-              setUser(res);
-            }
-          } catch (error) {
-            handleError(error);
-          } finally {
-            setIsReady(true);
-          }
-        };
-        fetchUser();
-      }, []);
-    
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      {isReady ? children : null}
+      {children}
     </UserContext.Provider>
   );
 };

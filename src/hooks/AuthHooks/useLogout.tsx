@@ -10,7 +10,8 @@ export const useLogout = () => {
   const logout = async () => {
     try {
       await logoutAPI();
-      setUser(null); // Clear user context
+      localStorage.removeItem("user");
+      setUser(null);
       navigate("/");
     } catch (error) {
       toast.error("Logout failed");
