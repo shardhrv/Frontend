@@ -1,9 +1,8 @@
+import { useSignup } from "../../hooks/AuthHooks/useSignup";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MdAccountCircle, MdPassword, MdOutlineMail, MdDriveFileRenameOutline } from "react-icons/md";
 import BaseButton from "../ui/BaseButton";
 import BaseInput from "../ui/BaseInput";
-import { useNavigate } from "react-router-dom";
 
 const SignUpForm: React.FC = () => {
   interface FormData {
@@ -22,52 +21,12 @@ const SignUpForm: React.FC = () => {
     email: "",
   });
 
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-
-  const {
-    mutate: signupMutation,
-    isPending,
-    isError,
-    error,
-  } = useMutation({
-    mutationFn: async (credentials: FormData) => {
-      const { username, firstName, lastName, password, email } = credentials;
-
-      if (password.length < 6) {
-        throw new Error("Password must be at least 6 characters long");
-      }
-
-      try {
-        const res = await fetch("/api/auth/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, firstName, lastName, password, email }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || "Something went wrong");
-        }
-
-        return data;
-      } catch (error: unknown) {
-        console.error(error);
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      navigate("/edit-profile"); // Navigate to EditProfilePage on success
-    },
-  });
+  const { signupUser, isPending } = useSignup();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    signupMutation(formData);
+    const { username, firstName, lastName, email, password } = formData;
+    signupUser(firstName, lastName, username, email, password);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,7 +122,6 @@ const SignUpForm: React.FC = () => {
           <BaseButton type="submit">
             {isPending ? "Loading..." : "Sign Up"}
           </BaseButton>
-          {isError && <p className="text-red-500">{error.message}</p>}
         </div>
       </form>
     </div>
