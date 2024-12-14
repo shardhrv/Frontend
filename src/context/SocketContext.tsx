@@ -1,7 +1,7 @@
 // Context to wrap App in socket in order to send messages instantly
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { io, Socket } from "socket.io-client";
-import { useAuthContext } from "./AuthContext";
+import { useUserContext } from "./UserContext";
 
 interface SocketContextType {
   socket: Socket | null;
@@ -25,7 +25,7 @@ interface SocketContextProviderProps {
 export const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ children }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<{ userId: string; username: string }[]>([]); // Adjust based on backend data
-  const { user } = useAuthContext();
+  const { user } = useUserContext();
 
   useEffect(() => {
     if (user) {
