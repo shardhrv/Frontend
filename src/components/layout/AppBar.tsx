@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/StuCoAppBarLogo.png';
 import DemoProfileImage from '../../assets/DemoProfileImage.png';
@@ -8,26 +8,11 @@ import { IoLibraryOutline } from "react-icons/io5";
 import { PiPathDuotone } from "react-icons/pi";
 import { BsHeartPulse } from "react-icons/bs";
 import { BiSearchAlt } from "react-icons/bi";
-
-type User = {
-  profileImage?: string;
-};
+import { useUserContext } from '../../context/UserContext';
 
 const MyAppBar: React.FC = () => {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    if (storedUser && token) {
-      const parsedUser = JSON.parse(storedUser);
-      setCurrentUser(parsedUser);
-      setIsLoggedIn(true);
-      console.log("Current user in MyAppBar:", parsedUser); // Check if profileImage exists here
-    }
-  }, []);
+  const { user } = useUserContext();
 
   return (
     <div className="bg-[#e4f3ec] text-white shadow-md w-full h-[56px] fixed top-0 left-0 right-0 z-50">
@@ -66,7 +51,7 @@ const MyAppBar: React.FC = () => {
         </div>
 
         {/* Right section: SearchBar & ProfilePic / Sign In Button */}
-        {isLoggedIn ? (
+        {!!user ? (
           <div className="flex items-center h-full left-3">
             <div className="relative h-[35px]">
               <input
@@ -81,7 +66,7 @@ const MyAppBar: React.FC = () => {
               onClick={() => navigate('/profile')}
             >
               <img 
-                src={currentUser?.profileImage && currentUser.profileImage.trim() !== '' ? currentUser.profileImage : DemoProfileImage} 
+                src={user.profileImage && user.profileImage.trim() !== "" ? user.profileImage : DemoProfileImage} 
                 alt="Profile" 
                 className="w-[38px] h-[38px] object-cover" 
               />
