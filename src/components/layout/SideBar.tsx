@@ -1,49 +1,79 @@
-import React, { useState } from 'react';
-import { IoPaperPlane } from "react-icons/io5";
-import { BiSolidContact } from "react-icons/bi";
-import { FaPeopleGroup } from "react-icons/fa6";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import React, { useState, useEffect, Fragment } from "react";
+import { NavLink } from "react-router-dom";
+import { NavItems } from "../../config"; // Import your config file
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
+const SideBar = () => {
+    const navItems = NavItems();
+    const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
+        const saved = window.localStorage.getItem("sidebarExpanded");
+        return saved !== null ? JSON.parse(saved) : true;
+    });
 
-const SideBar: React.FC = () => {
-    const [isExpanded, setIsExpanded] = useState(true); // Default will be expanded
-    const [numUnreadMessages, setNumUnreadMessages] = useState(0); // Set to 0 for now, TODO make API call to get unread messages
+    useEffect(() => {
+        window.localStorage.setItem("sidebarExpanded", JSON.stringify(isSidebarExpanded));
+    }, [isSidebarExpanded]);
 
     const toggleSidebar = () => {
-        setIsExpanded(!isExpanded);
+        setIsSidebarExpanded(!isSidebarExpanded);
     }
 
-    return (
-        <div className="bg-[#7fb598] w-[214px] h-full rounded-tr-lg rounded-br-lg justify-center p-[12px] pt-[16px] space-y-1">
-            {/* Toggle Button */}
-            <button
-                onClick={toggleSidebar}
-                className="absolute top-4 right-[-12px] bg-white text-[#7fb598] rounded-full p-1 shadow-md hover:bg-[#e4f3ec]"
+    return(
+        <div className="flex">
+            <div
+                className={`${
+                    isSidebarExpanded ? "w-[200px]" : "w-[68px]"
+                } h-full bg-[#7fb598] rounded-tr-lg rounded-br-lg 
+                border-r transition-all duration-300`}
             >
-                {isExpanded ? <FiChevronLeft /> : <FiChevronRight />}
-                Toggle
-            </button>
-            <button
-                className="w-[190px] h-[46px] flex items-center bg-transparent 
-                        hover:bg-[#e4f3ec] hover:text-[#7eb698]
-                        rounded-lg  text-base font-normal text-white"
-            >
-                <IoPaperPlane className=" w-[23px] h-[23px] ml-[15px] mr-[10px]" />
-                Messages
-                <div className="bg-[#de3b41] rounded-full w-[28px] h-[28px] ml-[20px] flex items-center justify-center text-sm text-white">
-                    {numUnreadMessages}
-                </div>
-            </button>
-            <button className="w-[190px] h-[46px] flex items-center bg-transparent hover:bg-[#e4f3ec] hover:text-[#7eb698] rounded-lg  text-base font-normal text-white">
-                <BiSolidContact className=" w-[23px] h-[23px] ml-[15px] mr-[10px]" />
-                Contact
-            </button>
-            <button className="w-[190px] h-[46px] flex items-center bg-transparent hover:bg-[#e4f3ec] hover:text-[#7eb698] rounded-lg  text-base font-normal text-white">
-                <FaPeopleGroup className=" w-[23px] h-[23px] ml-[15px] mr-[10px]" />
-                Community
-            </button>
+                <aside className="flex flex-col h-full px-4">
+                    <div className="mt-4 flex flex-col space-y-2">
+                        {navItems.map((item, idx) => (
+                        <Fragment key={idx}>
+                            <SideBarItem
+                            label={item.name}
+                            icon={item.icon}
+                            path={item.href}
+                            active={item.active}
+                            isSidebarExpanded={isSidebarExpanded}
+                            />
+                        </Fragment>
+                        ))}
+                    </div>
+                    <div className="mt-auto flex justify-center pb-4">
+                        <button
+                        onClick={toggleSidebar}
+                        className="p-2 border rounded-full bg-[#7fb598] text-white shadow hover:shadow-md transition-all"
+                        >
+                        {isSidebarExpanded ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+                        </button>
+                    </div>
+                </aside>
+            </div>
         </div>
-    )
+    );
 }
 
-export default SideBar
+export const SideBarItem: React.FC<{
+    label: string;
+    icon: React.ReactNode;
+    path: string;
+    active: boolean;
+    isSidebarExpanded: boolean;
+    }> = ({ label, icon, path, active, isSidebarExpanded }) => {
+    return (
+        <NavLink
+        to={path}
+        className={`flex items-center gap-2 p-2 rounded-md transition ${
+            active ? "bg-white text-[#7fb598]" : "text-white hover:bg-gray-200 hover:text-[#7fb598]"
+        }`}
+        >
+        <div className="flex items-center">
+            {icon}
+            {isSidebarExpanded && <span className="ml-2">{label}</span>}
+        </div>
+        </NavLink>
+    );
+};
+
+export default SideBar;
