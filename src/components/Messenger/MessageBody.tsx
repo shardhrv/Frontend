@@ -1,5 +1,3 @@
-
-
 const MessageBody = () => {
     return (
         <div className="overflow-y-auto h-full flex items-center justify-center">
