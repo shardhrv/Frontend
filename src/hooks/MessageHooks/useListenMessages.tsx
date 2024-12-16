@@ -1,27 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSocketContext } from "../../context/SocketContext";
-import { Message } from "../../models/Message"; // Import the existing Message interface
+import useChat from "../../zustand/useChat";
 
 const useListenMessages = () => {
-  const { socket } = useSocketContext();
-  const [messages, setMessages] = useState<Message[]>([]);
+	const { socket } = useSocketContext();
+	const { messages, setMessages } = useChat();
 
-  useEffect(() => {
-    const handleNewMessage = (newMessage: Message) => {
-      // Update messages state
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    };
+	useEffect(() => {
+		socket?.on("newMessage", (newMessage) => {
+			setMessages([...messages, newMessage]);
+		});
 
-    // Listen for new messages
-    socket?.on("newMessage", handleNewMessage);
-
-    // Cleanup: Remove the event listener
-    return () => {
-      socket?.off("newMessage", handleNewMessage);
-    };
-  }, [socket]);
-
-  return { messages, setMessages };
+		return () => {
+      socket?.off("newMessage");
+    }
+	}, [socket, setMessages, messages]);
 };
 
 export default useListenMessages;

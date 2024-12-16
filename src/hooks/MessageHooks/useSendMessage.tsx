@@ -1,36 +1,44 @@
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import { Message } from "../../models/Message"; // Import the Message interface
+import { Message } from "../../models/Message";
+import useChat from "../../zustand/useChat";
+import { useUserContext } from "../../context/UserContext";
+import { findParticipantId } from "../../utils/findParticipantId";
 
-const useSendMessage = (conversationId: string | null) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+const useSendMessage = () => {
+	const [loading, setLoading] = useState(false);
+	const { messages, setMessages, selectedChat } = useChat();
+  const { user } = useUserContext();
 
-  const sendMessage = async (message: string): Promise<void> => {
-    if (!conversationId) {
-      toast.error("No conversation selected.");
-      return;
-    }
+	const sendMessage = async (message : string) => {
+		setLoading(true);
+		try {
+      const participantId = findParticipantId(selectedChat, user?._id); 
 
-    setLoading(true);
-    try {
-      const { data: newMessage } = await axios.post<Message>(
-        `/api/messages/send/${conversationId}`,
+      if (!participantId) {
+        toast.error("No valid participant found.");
+        return;
+      }
+
+			const { data } = await axios.post<Message>(
+        `/api/messages/send/${participantId}`,
         { message }
       );
 
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    } catch (error: any) {
+			setMessages([...messages, data]);
+		} catch (error) {
       const errorMessage =
-        error.response?.data?.error || error.message || "An error occurred while sending the message.";
+        error instanceof AxiosError
+          ? error.response?.data?.error || "An unexpected error occurred"
+          : "An unexpected error occurred";
       toast.error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
+		} finally {
+			setLoading(false);
+		}
+	};
 
-  return { sendMessage, loading, messages, setMessages };
+	return { sendMessage, loading };
 };
 
 export default useSendMessage;

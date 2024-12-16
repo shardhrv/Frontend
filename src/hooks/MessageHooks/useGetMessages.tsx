@@ -1,38 +1,44 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import { Message } from "../../models/Message"; // Import your Message interface
+import { Message } from "../../models/Message";
+import useChat from "../../zustand/useChat";
+import { useUserContext } from "../../context/UserContext";
+import { findParticipantId } from "../../utils/findParticipantId";
 
-interface SelectedConversation {
-  _id: string; //id should belong to chat
-  name?: string; // Optional, add other fields as needed
-}
-
-const useGetMessages = (selectedConversation: SelectedConversation | null) => {
+const useGetMessages = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const { messages, setMessages, selectedChat } = useChat();
+  const { user } = useUserContext();
 
   useEffect(() => {
-    const getMessages = async () => {
-      if (!selectedConversation?._id) return; // Exit if no conversation is selected
+		const getMessages = async () => {
+			setLoading(true);
+			try {
+        const participantId = findParticipantId(selectedChat, user?._id); 
 
-      setLoading(true);
-      try {
-        const res = await axios.get<Message[]>(`/api/messages/${selectedConversation._id}`);
-        setMessages(res.data); // Update state with fetched messages
-      } catch (error: any) {
+        if (!participantId) {
+          toast.error("No valid participant found.");
+          return;
+        }
+        
+				const { data } = await axios.get<Message[]>(`/api/messages/${participantId}`);
+				setMessages(data);
+			} catch (error) {
         const errorMessage =
-          error.response?.data?.error || error.message || "An error occurred while fetching messages.";
+          error instanceof AxiosError
+            ? error.response?.data?.error || "An unexpected error occurred"
+            : "An unexpected error occurred";
         toast.error(errorMessage);
-      } finally {
-        setLoading(false); // Ensure loading is reset
-      }
-    };
+			} finally {
+				setLoading(false);
+			}
+		};
 
-    getMessages();
-  }, [selectedConversation?._id]);
+		if (selectedChat?._id) getMessages();
+	}, [selectedChat?._id, setMessages]);
 
-  return { messages, loading };
+	return { messages, loading };
 };
 
 export default useGetMessages;
