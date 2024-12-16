@@ -27,14 +27,11 @@ export const useSignup = () => {
         navigate("/home");
       }
     } catch (error) {
-      if (error instanceof AxiosError) {
-        const errorMessage =
-          error.response?.data?.error ||
-          "An unexpected error occurred"; 
-        toast.error(errorMessage);
-      } else {
-        toast.error("An unexpected error occurred");
-      }
+      const errorMessage =
+        error instanceof AxiosError
+          ? error.response?.data?.error || "An unexpected error occurred"
+          : "An unexpected error occurred";
+      toast.error(errorMessage);
     } finally {
       setIsPending(false);
     }
