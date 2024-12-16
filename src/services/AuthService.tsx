@@ -16,14 +16,13 @@ export const getUserProfileAPI = async () => {
 
 export const loginAPI = async (username: string, password: string) => {
   try {
-    const res = await axios.post<UserProfile>("/api/auth/login", {
+    const res = await axios.post("/api/auth/login", {
       username,
       password,
     });
-
-    return res.data;
+    return res.data.user;
   } catch (error) {
-    handleError(error);
+    throw error;
   }
 };
 
@@ -35,7 +34,7 @@ export const signupAPI = async (
   email: string
 ) => {
   try {
-    const res = await axios.post<UserProfile>("/api/auth/signup", {
+    const res = await axios.post("/api/auth/signup", {
       username,
       firstName,
       lastName,
@@ -43,9 +42,9 @@ export const signupAPI = async (
       email,
     });
 
-    return res.data;
+    return res.data.user;
   } catch (error) {
-    handleError(error);
+    throw error;
   }
 };
 
@@ -53,6 +52,6 @@ export const logoutAPI = async (): Promise<void> => {
   try {
     await axios.post("/api/auth/logout");
   } catch (error) {
-    handleError(error);
+    throw error;
   }
 };

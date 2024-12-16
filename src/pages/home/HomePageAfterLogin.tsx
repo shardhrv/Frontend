@@ -4,6 +4,7 @@ import MyAppBar from '../../components/layout/AppBar.tsx';
 import PostCard from '../../components/posts/PostCard.tsx';
 import CreatePostCard from '../../components/cards/CreatePostCard.tsx';
 import Calendar from '../../components/cards/Calendar.tsx'; // Import the Calendar component
+import SideBar from '../../components/layout/SideBar.tsx';
 
 // Define types for user and posts
 export type User = {
@@ -105,7 +106,10 @@ const MainPageAfterLogin: React.FC = () => {
       </section>
   
       {/* Main Content */}
-      <div className="flex mt-[64px] px-4">
+      <div className="flex w-screen h-full pt-[56px]">
+        <div className="flex sticky top-[56px] left-0 h-[calc(100vh-56px)]">
+          <SideBar />
+        </div>
         {/* Left Content - Create Post and Posts */}
         <div className="flex-grow flex flex-col items-center">
           {/* Create Post Card */}

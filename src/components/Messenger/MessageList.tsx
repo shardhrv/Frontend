@@ -1,7 +1,6 @@
 import { CiUser } from 'react-icons/ci';
 import { PiUsersThree } from "react-icons/pi";
 
-
 interface MessageListProps {
     title: string;
     numUnread: number;
