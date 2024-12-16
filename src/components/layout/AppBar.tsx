@@ -9,6 +9,7 @@ import { PiPathDuotone } from "react-icons/pi";
 import { BsHeartPulse } from "react-icons/bs";
 import { BiSearchAlt } from "react-icons/bi";
 import { useUserContext } from '../../context/UserContext';
+import LogoutButton from './LogoutButton';
 
 const MyAppBar: React.FC = () => {
   const navigate = useNavigate();
@@ -70,6 +71,9 @@ const MyAppBar: React.FC = () => {
                 alt="Profile" 
                 className="w-[38px] h-[38px] object-cover" 
               />
+            </div>
+            <div className="">
+              <LogoutButton/>
             </div>
           </div>
         ) : (
