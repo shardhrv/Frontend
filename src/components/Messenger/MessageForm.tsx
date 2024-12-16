@@ -4,9 +4,7 @@ import { FiPlus } from "react-icons/fi";
 import { IoImageOutline } from "react-icons/io5";
 import { BsPaperclip } from "react-icons/bs";
 import { HiEmojiHappy } from "react-icons/hi";
-
-
-
+import useSendMessage from '../../hooks/MessageHooks/useSendMessage';
 
 // Define the interface for the props, if any are needed
 interface MessageFormProps {
@@ -15,13 +13,13 @@ interface MessageFormProps {
 
 const MessageForm: React.FC<MessageFormProps> = ({ onSend }) => {
     const [message, setMessage] = useState<string>("");
+	const { loading, sendMessage } = useSendMessage();
 
-    const handleSend = () => {
-        if (message.trim()) {
-            onSend(message);
-            setMessage(""); // Clear the input after sending
-        }
-    };
+	const handleSubmit = async () => {
+		if (!message) return;
+		await sendMessage(message);
+		setMessage("");
+	};
 
     return (
         <div className="flex w-full h-full items-center p-2 border border-gray-100">
@@ -52,9 +50,9 @@ const MessageForm: React.FC<MessageFormProps> = ({ onSend }) => {
             </button>
             <button
                 className='rounded-full hover:bg-gray-200 p-2 mx-1'
-                onClick={handleSend}
+                onClick={handleSubmit}
             >
-                <FaRegPaperPlane className='text-[#7eb698]' />
+                { loading ? <div className='loading loading-spinner'></div> : <FaRegPaperPlane className='text-[#7eb698]' /> }
             </button>
         </div>
     );
