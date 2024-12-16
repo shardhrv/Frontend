@@ -8,7 +8,7 @@ import ProfilePage from './pages/home/ProfilePage';
 import MainPageAfterLogin from './pages/home/HomePageAfterLogin';
 import HomePage from './pages/home/HomePageBeforeLogin';
 import ProfileSetUpPage from './pages/auth/EditProfilePage';
-import ChatPage from './pages/home/Messenger';
+import MessagesPage from './pages/home/MessagesPage';
 
 const App = () => {
   return (
@@ -20,7 +20,7 @@ const App = () => {
         <Route path="/edit-profile" element={<ProfileSetUpPage />} />
         <Route path="/home" element={<MainPageAfterLogin />} />
         <Route path="/profile" element={<ProfilePage/>}/>
-        <Route path="/chats" element={<ChatPage/>}/>
+        <Route path="/chats" element={<MessagesPage/>}/>
 			</Routes>
       <Toaster/>
     </div>

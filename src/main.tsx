@@ -12,7 +12,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
       <UserContextProvider>
-        <App/>
+        <SocketContextProvider>
+          <App/>
+        </SocketContextProvider>
       </UserContextProvider>
     </QueryClientProvider>
   </BrowserRouter>
