@@ -9,7 +9,6 @@ import MessageBody from "../../components/Messenger/MessageBody";
 import MessageForm from "../../components/Messenger/MessageForm";
 import { useEffect, useState } from "react";
 
-
 function MessageHome() {
 
     const users = getUser();
@@ -22,10 +21,10 @@ function MessageHome() {
 
     return (
         <div className="w-screen h-screen overflow-hidden bg-white">
-            <div className="w-full">
+            <div className="w-full fixed top-0 left-0 z-50">
                 <MyAppBar />
             </div>
-            <main className="flex w-screen h-full">
+            <main className="flex w-screen h-full pt-[56px]">
                 <SideBar />
                 {/* Recent Chats */}
                 <div className="bg-gray-100 w-[256px] h-full rounded-lg justify-center p-[16px] pt-[16px] space-y-1 relative">
@@ -34,13 +33,13 @@ function MessageHome() {
                             src={ChatIcon}
                             className="w-10 h-10 mr-2"
                         />
-                        <h1 className="text-[#171a1f] text-2xl font-semibold"> Recent Chats</h1>
+                        <h1 className="text-[#171a1f] text-2xl font-semibold">Chats</h1>
                     </div>
                     {/* Searchbar */}
                     <div className="relative h-[35px]">
                         <input
                             type="text"
-                            placeholder="Search ..."
+                            placeholder="Search..."
                             className="h-[35px] w-[223px] pl-8 pr-4 py-1 text-sm rounded-lg border border-gray-300 focus:outline-none focus:border-gray-400 text-[#bcc1ca] font-light"
                         />
                         <BiSearchAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
