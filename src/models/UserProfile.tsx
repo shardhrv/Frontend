@@ -17,6 +17,9 @@ export type UserProfile = {
   country?: string;
   educationLevel?: string;
   academicYear?: string;
+  major?: string;
+  gpa?: string;
+  role?: string;
   // IDs
   followers?: string[];
   following?: string[];
