@@ -5,17 +5,14 @@ import { useUserContext } from "./UserContext";
 
 interface SocketContextType {
   socket: Socket | null;
-  onlineUsers: { userId: string; username: string }[]; // Adjust based on the actual structure
+  onlineUsers: string[];
+  isUserOnline: (userId: string) => boolean;
 }
 
-const SocketContext = createContext<SocketContextType | undefined>(undefined);
+const SocketContext = createContext<SocketContextType>({} as SocketContextType);
 
 export const useSocketContext = (): SocketContextType => {
-  const context = useContext(SocketContext);
-  if (!context) {
-    throw new Error("useSocketContext must be used within a SocketContextProvider");
-  }
-  return context;
+  return useContext(SocketContext);
 };
 
 interface SocketContextProviderProps {
@@ -24,36 +21,40 @@ interface SocketContextProviderProps {
 
 export const SocketContextProvider: React.FC<SocketContextProviderProps> = ({ children }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [onlineUsers, setOnlineUsers] = useState<{ userId: string; username: string }[]>([]); // Adjust based on backend data
+  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const { user } = useUserContext();
 
   useEffect(() => {
     if (user) {
-      const socketInstance = io("http://localhost:5000", {
+      const socket = io("http://localhost:5000", {
         query: {
           userId: user._id,
         },
       });
 
-      setSocket(socketInstance);
+      setSocket(socket);
 
       // Listen for online users
-      socketInstance.on("getOnlineUsers", (users: { userId: string; username: string }[]) => {
+      socket.on("getOnlineUsers", (users: string[]) => {
         setOnlineUsers(users);
       });
 
       // Cleanup function
       return () => {
-        socketInstance.close(); // Properly close the socket connection
-      };
+        socket.close();
+      }
     } else if (socket) {
       socket.close();
       setSocket(null);
     }
   }, [user]);
 
+  const isUserOnline = (userId: string): boolean => {
+    return onlineUsers.includes(userId);
+  };
+
   return (
-    <SocketContext.Provider value={{ socket, onlineUsers }}>
+    <SocketContext.Provider value={{ socket, onlineUsers, isUserOnline }}>
       {children}
     </SocketContext.Provider>
   );
